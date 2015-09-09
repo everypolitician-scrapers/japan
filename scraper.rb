@@ -31,7 +31,7 @@ def scrape_list(url)
       image: URI.join(url, tds[0].css('img/@src').to_s).to_s,
       area: tds[3].text,
       term: 46,
-      source: url
+      source: url.to_s
     }
     ScraperWiki.save_sqlite([:name, :area], data)
   end
