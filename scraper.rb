@@ -1,25 +1,38 @@
-# This is a template for a Ruby scraper on morph.io (https://morph.io)
-# including some code snippets below that you should find helpful
+# #!/bin/env ruby
+# encoding: utf-8
 
-# require 'scraperwiki'
-# require 'mechanize'
-#
-# agent = Mechanize.new
-#
-# # Read in a page
-# page = agent.get("http://foo.com")
-#
-# # Find somehing on the page using css selectors
-# p page.at('div.content')
-#
-# # Write out to the sqlite database using scraperwiki library
-# ScraperWiki.save_sqlite(["name"], {"name" => "susan", "occupation" => "software developer"})
-#
-# # An arbitrary query against the database
-# ScraperWiki.select("* from data where 'name'='peter'")
+require 'scraperwiki'
+require 'nokogiri'
+require 'open-uri/cached'
 
-# You don't have to do things with the Mechanize or ScraperWiki libraries.
-# You can use whatever gems you want: https://morph.io/documentation/ruby
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
+OpenURI::Cache.cache_path = '.cache'
+
+def noko_for(url)
+  Nokogiri::HTML(open(url).read)
+end
+
+def scrape_pages(url)
+  scrape_list(url)
+  noko = noko_for(url)
+  noko.css('p.r + table tr td.c a').each do |anchor|
+    url = URI.join(url, anchor.css('@href').to_s)
+    scrape_list(url)
+  end
+end
+
+def scrape_list(url)
+  noko = noko_for(url)
+  noko.css('h1#TopContents + table tr', 'h1#TopContents + br + table tr').each do |tr|
+    tds = tr.css('td')
+    next if tds.size < 1
+    data = {
+      name: tds[1].text,
+      faction: tds[2].text,
+      image: URI.join(url, tds[0].css('img/@src').to_s).to_s,
+      area: tds[3].text
+    }
+    ScraperWiki.save_sqlite([:name, :area], data)
+  end
+end
+
+scrape_pages('http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm')
