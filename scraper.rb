@@ -11,6 +11,11 @@ def noko_for(url)
   Nokogiri::HTML(open(url).read)
 end
 
+def get_gender(name)
+  return 'male' if name.match('Mr.')
+  return 'female' if name.match('Ms.')
+end
+
 def scrape_pages(url)
   scrape_list(url)
   noko = noko_for(url)
@@ -25,8 +30,12 @@ def scrape_list(url)
   noko.css('h1#TopContents + table tr', 'h1#TopContents + br + table tr').each do |tr|
     tds = tr.css('td')
     next if tds.size < 1
+    name = tds[1].text
+    gender = get_gender(name)
+    name = name.gsub(/M[rs].\s+/, '')
     data = {
-      name: tds[1].text,
+      name: name,
+      gender: gender,
       faction: tds[2].text,
       image: URI.join(url, tds[0].css('img/@src').to_s).to_s,
       area: tds[3].text,
