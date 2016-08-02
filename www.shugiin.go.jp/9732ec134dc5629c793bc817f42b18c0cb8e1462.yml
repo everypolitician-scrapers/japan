@@ -1,0 +1,37 @@
+---
+request:
+  method: get
+  uri: http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_g.htm
+  body:
+    encoding: US-ASCII
+    string: ''
+  headers:
+    Accept-Encoding:
+    - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+    Accept:
+    - '*/*'
+    User-Agent:
+    - Ruby
+response:
+  status:
+    code: 200
+    message: OK
+  headers:
+    Server:
+    - Lotus-Domino
+    Date:
+    - Tue, 02 Aug 2016 13:52:13 GMT
+    Last-Modified:
+    - Mon, 01 Aug 2016 08:18:04 GMT
+    Content-Type:
+    - text/html; charset=US-ASCII
+    Content-Length:
+    - '9482'
+    Etag:
+    - W/"MTAtODA4Qy00OTI1N0RDRjAwMzM1MzYwLTQ5MjU4MDAyMDAyRDk5NjItMA=="
+    Set-Cookie:
+    - Coyote-2-246088d2=3b01a8c0:0; path=/
+  body:
+    encoding: UTF-8
+  http_version: 
+recorded_at: Tue, 02 Aug 2016 13:45:40 GMT
