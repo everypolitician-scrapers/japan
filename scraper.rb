@@ -3,12 +3,13 @@
 
 require 'scraperwiki'
 require 'nokogiri'
-require 'open-uri/cached'
-
-OpenURI::Cache.cache_path = '.cache'
+require 'scraped_page_archive'
 
 def noko_for(url)
-  Nokogiri::HTML(open(url).read)
+  ScrapedPageArchive.record do
+    response = open(url.to_s).read
+    Nokogiri::HTML(response)
+  end
 end
 
 def get_gender(name)
