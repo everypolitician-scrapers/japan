@@ -40,7 +40,7 @@ def scrape_list(url)
     data = {
       name: name,
       gender: gender,
-      faction: tds[2].text,
+      faction: tds[2].children.map(&:text).join(" ").tidy,
       image: URI.join(url, tds[0].css('img/@src').to_s).to_s,
       area: tds[3].text,
       term: 46,
