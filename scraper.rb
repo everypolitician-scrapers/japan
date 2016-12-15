@@ -51,14 +51,3 @@ def scrape_list(url)
 end
 
 scrape_pages('http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm')
-
-terms = [
-  {
-    id: 46,
-    name: 'The 46th House of Representatives',
-    start_date: '2014-12-14',
-    source: 'https://en.wikipedia.org/wiki/House_of_Representatives_(Japan)'
-  }
-]
-
-ScraperWiki.save_sqlite([:id], terms, 'terms')
