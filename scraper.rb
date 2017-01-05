@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # #!/bin/env ruby
 # encoding: utf-8
 
@@ -33,20 +34,20 @@ def scrape_list(url)
   noko = noko_for(url)
   noko.css('h1#TopContents + table tr', 'h1#TopContents + br + table tr').each do |tr|
     tds = tr.css('td')
-    next if tds.size < 1
+    next if tds.empty?
     name = tds[1].text
     gender = get_gender(name)
     name = name.gsub(/M[rs].\s+/, '')
     data = {
-      name: name,
-      gender: gender,
-      faction: tds[2].children.map(&:text).join(" ").tidy,
-      image: URI.join(url, tds[0].css('img/@src').to_s).to_s,
-      area: tds[3].text,
-      term: 46,
-      source: url.to_s
+      name:    name,
+      gender:  gender,
+      faction: tds[2].children.map(&:text).join(' ').tidy,
+      image:   URI.join(url, tds[0].css('img/@src').to_s).to_s,
+      area:    tds[3].text,
+      term:    46,
+      source:  url.to_s,
     }
-    ScraperWiki.save_sqlite([:name, :area], data)
+    ScraperWiki.save_sqlite(%i(name area), data)
   end
 end
 
