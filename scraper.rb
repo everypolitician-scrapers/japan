@@ -74,13 +74,17 @@ class MemberRowEn < Scraped::HTML
   end
 end
 
-class MembersListJp < Scraped::HTML
+class LetterListPageJp < Scraped::HTML
   decorator Scraped::Response::Decorator::AbsoluteUrls
 
   field :members do
     noko.xpath('//tr[td[@class="sh1td5"]]').map do |tr|
       fragment tr => MemberRowJp
     end
+  end
+
+  field :letter_pages do
+    noko.xpath('//div[@id="breadcrumb"]/following-sibling::p/a/@href').map(&:text) - [url]
   end
 end
 
@@ -130,7 +134,8 @@ end
 
 def japanese_data
   start = 'http://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/syu/1giin.htm'
-  front = scrape start => MembersListJp
+  front = scrape start => LetterListPageJp
+  pages = [front, front.letter_pages.map { |url| scrape url => LetterListPageJp }].flatten
   front.members.map(&:to_h)
 end
 
