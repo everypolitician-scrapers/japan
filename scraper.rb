@@ -34,6 +34,10 @@ class LetterListPageEn < Scraped::HTML
 end
 
 class MemberRowEn < Scraped::HTML
+  field :id do
+    File.basename(image, '.jpg')
+  end
+
   field :name do
     raw_name.gsub(/M[rs]\./, '').tidy
   end
