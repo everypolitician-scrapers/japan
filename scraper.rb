@@ -11,7 +11,7 @@ require 'scraperwiki'
 # OpenURI::Cache.cache_path = '.cache'
 require 'scraped_page_archive/open-uri'
 
-class LetterListPage < Scraped::HTML
+class LetterListPageEn < Scraped::HTML
   decorator Scraped::Response::Decorator::AbsoluteUrls
 
   field :members do
@@ -123,8 +123,8 @@ end
 
 def english_data
   start = 'http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm'
-  front = scrape start => LetterListPage
-  pages = [front, front.letter_pages.map { |url| scrape url => LetterListPage }].flatten
+  front = scrape start => LetterListPageEn
+  pages = [front, front.letter_pages.map { |url| scrape url => LetterListPageEn }].flatten
   pages.flat_map(&:members).map(&:to_h)
 end
 
