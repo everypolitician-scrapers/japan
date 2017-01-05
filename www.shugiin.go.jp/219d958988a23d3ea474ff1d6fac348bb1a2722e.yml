@@ -1,0 +1,37 @@
+---
+request:
+  method: get
+  uri: http://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/syu/9giin.htm
+  body:
+    encoding: US-ASCII
+    string: ''
+  headers:
+    Accept-Encoding:
+    - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+    Accept:
+    - "*/*"
+    User-Agent:
+    - Ruby
+response:
+  status:
+    code: 200
+    message: OK
+  headers:
+    Server:
+    - Lotus-Domino
+    Date:
+    - Thu, 05 Jan 2017 18:14:25 GMT
+    Last-Modified:
+    - Thu, 05 Jan 2017 08:27:25 GMT
+    Content-Type:
+    - text/html; charset=Shift_JIS
+    Content-Length:
+    - '7282'
+    Etag:
+    - W/"MTAtODA4Qy00OTI1N0Y5QTAwMDM0ODRDLTQ5MjU4MDlGMDAyRTc0NEQtMA=="
+    Set-Cookie:
+    - Coyote-2-246088d2=3a01a8c0:0; path=/
+  body:
+    encoding: ASCII-8BIT
+  http_version: 
+recorded_at: Thu, 05 Jan 2017 18:20:32 GMT
