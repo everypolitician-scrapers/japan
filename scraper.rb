@@ -1,54 +1,88 @@
-# frozen_string_literal: true
-# #!/bin/env ruby
+#!/bin/env ruby
 # encoding: utf-8
+# frozen_string_literal: true
 
-require 'scraperwiki'
 require 'nokogiri'
+require 'pry'
+require 'scraped'
+require 'scraperwiki'
+
+# require 'open-uri/cached'
+# OpenURI::Cache.cache_path = '.cache'
 require 'scraped_page_archive/open-uri'
 
-class String
-  def tidy
-    gsub(/[[:space:]]+/, ' ').strip
+class LetterListPage < Scraped::HTML
+  decorator Scraped::Response::Decorator::AbsoluteUrls
+
+  field :members do
+    wanted_rows.map { |tr| fragment tr => MemberRow }
+  end
+
+  field :letter_pages do
+    noko.css('p.r + table tr td.c a/@href').map(&:text)
+  end
+
+  private
+
+  def all_rows
+    noko.css('h1#TopContents + table tr', 'h1#TopContents + br + table tr')
+  end
+
+  def wanted_rows
+    all_rows.reject { |tr| tr.css('td').empty? }
   end
 end
 
-def noko_for(url)
-  Nokogiri::HTML(open(url).read)
-end
+class MemberRow < Scraped::HTML
+  field :name do
+    raw_name.gsub(/M[rs]\./, '').tidy
+  end
 
-def get_gender(name)
-  return 'male' if name.include?('Mr.')
-  return 'female' if name.include?('Ms.')
-end
+  field :gender do
+    return 'male' if raw_name.include?('Mr.')
+    return 'female' if raw_name.include?('Ms.')
+  end
 
-def scrape_pages(url)
-  scrape_list(url)
-  noko = noko_for(url)
-  noko.css('p.r + table tr td.c a').each do |anchor|
-    url = URI.join(url, anchor.css('@href').to_s)
-    scrape_list(url)
+  field :faction do
+    tds[2].children.map(&:text).join(' ').tidy
+  end
+
+  field :image do
+    tds[0].css('img/@src').to_s
+  end
+
+  field :area do
+    tds[3].text
+  end
+
+  field :term do
+    46
+  end
+
+  field :source do
+    url.to_s
+  end
+
+  private
+
+  def tds
+    noko.css('td')
+  end
+
+  def raw_name
+    tds[1].text
   end
 end
 
-def scrape_list(url)
-  noko = noko_for(url)
-  noko.css('h1#TopContents + table tr', 'h1#TopContents + br + table tr').each do |tr|
-    tds = tr.css('td')
-    next if tds.empty?
-    name = tds[1].text
-    gender = get_gender(name)
-    name = name.gsub(/M[rs].\s+/, '')
-    data = {
-      name:    name,
-      gender:  gender,
-      faction: tds[2].children.map(&:text).join(' ').tidy,
-      image:   URI.join(url, tds[0].css('img/@src').to_s).to_s,
-      area:    tds[3].text,
-      term:    46,
-      source:  url.to_s,
-    }
-    ScraperWiki.save_sqlite(%i(name area), data)
-  end
+def scrape(h)
+  url, klass = h.to_a.first
+  klass.new(response: Scraped::Request.new(url: url).response)
 end
 
-scrape_pages('http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm')
+start = 'http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm'
+front = scrape start => LetterListPage
+pages = [front, front.letter_pages.map { |url| scrape url => LetterListPage }].flatten
+
+data = pages.flat_map(&:members).map(&:to_h)
+# puts data
+ScraperWiki.save_sqlite(%i(name area), data)
