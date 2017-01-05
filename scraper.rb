@@ -161,4 +161,6 @@ data = english_data.map do |en_mem|
 end
 
 # puts data
+
+ScraperWiki.sqliteexecute('DELETE FROM data') rescue nil
 ScraperWiki.save_sqlite(%i(name area), data)
