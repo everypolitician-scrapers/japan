@@ -90,7 +90,7 @@ end
 
 class MemberRowJp < Scraped::HTML
   field :id do
-    File.basename(member_url, '.html')
+    File.basename(source, '.html')
   end
 
   field :name__jp do
@@ -109,7 +109,7 @@ class MemberRowJp < Scraped::HTML
     tds[3].text.tidy
   end
 
-  field :member_url do
+  field :source do
     tds[0].css('a/@href').text
   end
 
