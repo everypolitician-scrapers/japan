@@ -153,6 +153,12 @@ def japanese_data
   end
 end
 
-# puts english_data
-# puts japanese_data
-ScraperWiki.save_sqlite(%i(name area), english_data)
+jp_data = japanese_data.group_by { |h| h[:id] }
+
+data = english_data.map do |en_mem|
+  jp_mem = jp_data[en_mem[:id]] or raise binding.pry
+  en_mem.merge(jp_mem.first)
+end
+
+# puts data
+ScraperWiki.save_sqlite(%i(name area), data)
