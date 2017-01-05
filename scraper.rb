@@ -120,6 +120,14 @@ class MemberRowJp < Scraped::HTML
   end
 end
 
+class MemberPageJp < Scraped::HTML
+  decorator Scraped::Response::Decorator::AbsoluteUrls
+
+  field :image do
+    noko.css('#photo img/@src').text
+  end
+end
+
 def scrape(h)
   url, klass = h.to_a.first
   klass.new(response: Scraped::Request.new(url: url).response)
@@ -136,7 +144,9 @@ def japanese_data
   start = 'http://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/syu/1giin.htm'
   front = scrape start => LetterListPageJp
   pages = [front, front.letter_pages.map { |url| scrape url => LetterListPageJp }].flatten
-  front.members.map(&:to_h)
+  pages.flat_map(&:members).map do |mem|
+    mem.to_h.merge(scrape(mem.source => MemberPageJp).to_h)
+  end
 end
 
 # puts english_data
