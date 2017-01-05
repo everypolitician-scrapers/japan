@@ -74,15 +74,66 @@ class MemberRowEn < Scraped::HTML
   end
 end
 
+class MembersListJp < Scraped::HTML
+  decorator Scraped::Response::Decorator::AbsoluteUrls
+
+  field :members do
+    noko.xpath('//tr[td[@class="sh1td5"]]').map do |tr|
+      fragment tr => MemberRowJp
+    end
+  end
+end
+
+class MemberRowJp < Scraped::HTML
+  field :id do
+    File.basename(member_url, '.html')
+  end
+
+  field :name__jp do
+    tds[0].text.tidy
+  end
+
+  field :name__jp_hiragana do
+    tds[1].text.tidy
+  end
+
+  field :faction__jp do
+    tds[2].text.tidy
+  end
+
+  field :area__jp do
+    tds[3].text.tidy
+  end
+
+  field :member_url do
+    tds[0].css('a/@href').text
+  end
+
+  private
+
+  def tds
+    noko.css('td')
+  end
+end
+
 def scrape(h)
   url, klass = h.to_a.first
   klass.new(response: Scraped::Request.new(url: url).response)
 end
 
-start = 'http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm'
-front = scrape start => LetterListPage
-pages = [front, front.letter_pages.map { |url| scrape url => LetterListPage }].flatten
+def english_data
+  start = 'http://www.shugiin.go.jp/internet/itdb_english.nsf/html/statics/member/mem_a.htm'
+  front = scrape start => LetterListPage
+  pages = [front, front.letter_pages.map { |url| scrape url => LetterListPage }].flatten
+  pages.flat_map(&:members).map(&:to_h)
+end
 
-data = pages.flat_map(&:members).map(&:to_h)
-# puts data
-ScraperWiki.save_sqlite(%i(name area), data)
+def japanese_data
+  start = 'http://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/syu/1giin.htm'
+  front = scrape start => MembersListJp
+  front.members.map(&:to_h)
+end
+
+# puts english_data
+# puts japanese_data
+ScraperWiki.save_sqlite(%i(name area), english_data)
