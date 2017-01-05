@@ -15,7 +15,7 @@ class LetterListPage < Scraped::HTML
   decorator Scraped::Response::Decorator::AbsoluteUrls
 
   field :members do
-    wanted_rows.map { |tr| fragment tr => MemberRow }
+    wanted_rows.map { |tr| fragment tr => MemberRowEn }
   end
 
   field :letter_pages do
@@ -33,7 +33,7 @@ class LetterListPage < Scraped::HTML
   end
 end
 
-class MemberRow < Scraped::HTML
+class MemberRowEn < Scraped::HTML
   field :name do
     raw_name.gsub(/M[rs]\./, '').tidy
   end
