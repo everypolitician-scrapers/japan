@@ -56,7 +56,7 @@ class MemberRowEn < Scraped::HTML
   end
 
   field :area do
-    tds[3].text
+    tds[3].text.tidy
   end
 
   field :term do
