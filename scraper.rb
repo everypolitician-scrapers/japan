@@ -17,8 +17,8 @@ def noko_for(url)
 end
 
 def get_gender(name)
-  return 'male' if name.match('Mr.')
-  return 'female' if name.match('Ms.')
+  return 'male' if name.include?('Mr.')
+  return 'female' if name.include?('Ms.')
 end
 
 def scrape_pages(url)
