@@ -97,19 +97,19 @@ class MemberRowJp < Scraped::HTML
     File.basename(source, '.html')
   end
 
-  field :name__jp do
+  field :name__ja do
     tds[0].text.tidy
   end
 
-  field :name__jp_hiragana do
+  field :name__ja_hira do
     tds[1].text.tidy
   end
 
-  field :faction__jp do
+  field :faction__ja do
     tds[2].text.tidy
   end
 
-  field :area__jp do
+  field :area__ja do
     tds[3].text.tidy
   end
 
