@@ -20,18 +20,18 @@ response:
     Server:
     - Lotus-Domino
     Date:
-    - Wed, 08 Mar 2017 00:45:17 GMT
+    - Thu, 09 Mar 2017 15:26:30 GMT
     Last-Modified:
-    - Wed, 08 Mar 2017 00:33:31 GMT
+    - Thu, 09 Mar 2017 08:42:00 GMT
     Content-Type:
     - text/html; charset=Shift_JIS
     Content-Length:
     - '7391'
     Etag:
-    - W/"MTAtODA4Qy00OTI1N0Y5QTAwMDM0ODRDLTQ5MjU4MEREMDAwMzExNkUtMA=="
+    - W/"MTAtODA4Qy00OTI1N0Y5QTAwMDQxNjE2LTQ5MjU4MERFMDAyRkNBMzUtMA=="
     Set-Cookie:
-    - Coyote-2-246088d2=3a01a8c0:0; path=/
+    - Coyote-2-246088d2=3b01a8c0:0; path=/
   body:
     encoding: ASCII-8BIT
   http_version: 
-recorded_at: Wed, 08 Mar 2017 00:51:33 GMT
+recorded_at: Thu, 09 Mar 2017 15:17:16 GMT
