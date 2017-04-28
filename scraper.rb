@@ -163,4 +163,4 @@ end
 # puts data
 
 ScraperWiki.sqliteexecute('DELETE FROM data') rescue nil
-ScraperWiki.save_sqlite(%i(name area), data)
+ScraperWiki.save_sqlite(%i[name area], data)
