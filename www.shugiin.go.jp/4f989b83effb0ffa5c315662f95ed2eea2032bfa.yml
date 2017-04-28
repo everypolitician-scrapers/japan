@@ -20,7 +20,7 @@ response:
     Server:
     - Lotus-Domino
     Date:
-    - Thu, 27 Apr 2017 07:49:02 GMT
+    - Fri, 28 Apr 2017 08:22:14 GMT
     Last-Modified:
     - Thu, 27 Apr 2017 01:07:34 GMT
     Content-Type:
@@ -34,4 +34,4 @@ response:
   body:
     encoding: ASCII-8BIT
   http_version: 
-recorded_at: Thu, 27 Apr 2017 07:49:24 GMT
+recorded_at: Fri, 28 Apr 2017 08:22:35 GMT
