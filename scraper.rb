@@ -12,7 +12,7 @@ require 'scraperwiki'
 require 'scraped_page_archive/open-uri'
 
 class LetterListPageEn < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :members do
     wanted_rows.map { |tr| fragment tr => MemberRowEn }
@@ -79,7 +79,7 @@ class MemberRowEn < Scraped::HTML
 end
 
 class LetterListPageJp < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :members do
     noko.xpath('//tr[td[@class="sh1td5"]]').map do |tr|
@@ -125,7 +125,7 @@ class MemberRowJp < Scraped::HTML
 end
 
 class MemberPageJp < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :image do
     noko.css('#photo img/@src').text
