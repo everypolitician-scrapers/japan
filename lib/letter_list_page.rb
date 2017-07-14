@@ -3,7 +3,7 @@
 require 'scraped'
 
 class LetterListPageJp < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :members do
     noko.xpath('//tr[td[@class="sh1td5"]]').map do |tr|

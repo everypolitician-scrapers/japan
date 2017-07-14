@@ -3,7 +3,7 @@
 require 'scraped'
 
 class LetterListPageEn < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :members do
     wanted_rows.map { |tr| fragment tr => MemberRowEn }
