@@ -29,7 +29,7 @@ class MemberRowEn < Scraped::HTML
   end
 
   field :term do
-    46
+    48
   end
 
   field :source do
