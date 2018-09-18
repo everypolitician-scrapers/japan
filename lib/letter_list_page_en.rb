@@ -10,7 +10,7 @@ class LetterListPageEn < Scraped::HTML
   end
 
   field :letter_pages do
-    noko.css('p.r + table tr td.c a/@href').map(&:text)
+    noko.css('p.r + table tr td.c1 a/@href').map(&:text)
   end
 
   private
