@@ -40,8 +40,7 @@ data = english_data.map do |en_mem|
   jp_mem = jp_data[en_mem[:id]] or raise binding.pry
   en_mem.merge(jp_mem.first)
 end
-
-# puts data
+data.each { |mem| puts mem.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h } if ENV['MORPH_DEBUG']
 
 ScraperWiki.sqliteexecute('DROP TABLE data') rescue nil
 ScraperWiki.save_sqlite(%i[name area], data)
