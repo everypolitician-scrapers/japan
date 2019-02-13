@@ -28,7 +28,7 @@ def japanese_data
   start = 'http://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/syu/1giin.htm'
   front = scrape start => LetterListPageJp
   pages = [front, front.letter_pages.map { |url| scrape url => LetterListPageJp }].flatten
-  pages.flat_map(&:members).map do |mem|
+  pages.flat_map(&:members).reject { |mem| mem.source.empty? }.map do |mem|
     mem.to_h.merge(scrape(mem.source => MemberPageJp).to_h)
   end
 end
